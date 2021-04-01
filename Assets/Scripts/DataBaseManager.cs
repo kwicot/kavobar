@@ -5,78 +5,155 @@ using UnityEngine.Networking;
 
 public class DataBaseManager : MonoBehaviour
 {
-    public string phoneNumber;
-    public string name;
-    public string password;
-    // Start is called before the first frame update
-    void Start()
+    public string URL_RegisterPHP;
+    public string URL_LoginPHP;
+    public string URL_VerifyCodePHP;
+    private string phoneNumber;
+    private string firstName;
+    private string secondName;
+    private string password;
+    [HideInInspector]public string mail;
+    Controller CC => Controller.controller;
+
+    public void TryRegistration(string _firstName,string _secondName, string _pass, string _number,string _mail)
     {
+        phoneNumber = _number;
+        firstName = _firstName;
+        secondName = _secondName;
+        password = _pass;
+        mail = _mail;
+        StartCoroutine(Register());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TryVerifyCode(string code)
     {
-        
+        StartCoroutine(VerifyCode(code));
     }
 
-    public void TryRegister()
+    public void TryLogin(string phone, string pass)
     {
-        if (name.Length > 4 && password.Length > 6 && phoneNumber.Length >= 10)
-        {
-            StartCoroutine(Register());
-        }
+        phoneNumber = phone;
+        password = pass;
+        StartCoroutine(Login());
     }
 
-    public void TryLogin()
-    {
-        
-    }
-
-
-    private IEnumerator Register()
+    IEnumerator VerifyCode(string code)
     {
         WWWForm form = new WWWForm();
-        form.AddField("Name", name);
-        form.AddField("Pass",password);
-        form.AddField("phoneNumber",phoneNumber);
-        WWW request = new WWW("http://kavobar@k82451.hostua5.fornex.host/KavoBar/index.php",form);
+        form.AddField("code",code);
+        form.AddField("mail",mail);
+        WWW request = new WWW(URL_VerifyCodePHP,form);
         yield return request;
         if (request.error != null)
         {
-            Debug.Log("Error" + request.error);
+            Debug.LogError(request.error);
             yield break;
-
         }
-        LogError(request.text);
+        Logic(request.text);
+    }
+    private IEnumerator Register()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("firstName", firstName);
+        form.AddField("secondName", firstName);
+        form.AddField("pass",password);
+        form.AddField("phone",phoneNumber);
+        form.AddField("mail",mail);
+
+        WWW request = new WWW(URL_RegisterPHP,form);
+        
+        yield return request;
+        
+        if (request.error != null)
+        {
+            Debug.LogError(request.error);
+            yield break;
+        }
+        
+        Logic(request.text);
     }
 
-    void LogError(string id)
+    IEnumerator Login()
     {
-        switch (id)
+        WWWForm form = new WWWForm();
+        form.AddField("pass",password);
+        form.AddField("phone",phoneNumber);
+        WWW request = new WWW(URL_LoginPHP,form);
+        yield return request;
+        
+        if (request.error != null)
         {
-            case "1": //Такой пользователь уже есть
+            Debug.LogError(request.text);
+            Debug.LogError(request.error);
+            yield break;
+        }
+        
+        Logic(request.text);
+    }
+
+    void Logic(string txt)
+    {
+        Debug.Log(txt);
+        switch (txt)
+        {
+            case "1": //Пользователь с таким номером уже зарегестрирован
             {
-                Debug.Log("This user already registered");
+                TextOutput.txt.Show("Пользователь с таким номером уже зарегестрирован");
                 break;
             }
-            case "2": //Неверный формат имени
+            case "2": //Неверный номер
             {
-                
+                TextOutput.txt.Show("Неверный номер");
                 break;
             }
-            case "3":     //Неверный пароль
+            case "3": //Неверный пароль
             {
-                
+                TextOutput.txt.Show("Неверный пароль");
                 break;
             }
-            case "4":
+            case "4": // Успешный вход
             {
-                
+                TextOutput.txt.Show("Успешный вход");
+                CC.HideLogPanel();
+                CC.ShowMainPanel();
                 break;
             }
-            case "5":
+            case "5": //Код успешно отправлен
             {
-                
+                TextOutput.txt.Show("Код отправлен на почту- " + mail);
+                CC.HideRegPanel();
+                CC.ShowVerifyPanel();
+                break;
+            }
+            case "6": //Пользователь не найден
+            {
+                TextOutput.txt.Show("Пользователь не найден");
+                break;
+            }
+            case "7": //Код успешно проверен
+            {
+                TextOutput.txt.Show("Код успешно проверен");
+                CC.HideVerifyPanel();
+                CC.ShowMainPanel();
+                break;
+            }
+            case "8": //Неверный код
+            {
+                TextOutput.txt.Show("Неверный код");
+                break;
+            }
+            case "9": //Неверно указаная почта
+            {
+                TextOutput.txt.Show("Неверно указана почта");
+                break;
+            }
+            case "10": //Пользователь с такой почтой уже зарегистрирован
+            {
+                TextOutput.txt.Show("Пользователь с такой почтой уже зарегистрирован");
+                break;
+            }
+            case "": //
+            {
                 break;
             }
         }

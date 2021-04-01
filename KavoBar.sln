@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{27178b1f-28ff-7526-fbee-8c73769385b7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeGallery.Editor", "NativeGallery.Editor.csproj", "{f9fb7410-70d8-6827-5857-bb44cef65f55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{27178b1f-28ff-7526-fbee-8c73769385b7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27178b1f-28ff-7526-fbee-8c73769385b7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27178b1f-28ff-7526-fbee-8c73769385b7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{f9fb7410-70d8-6827-5857-bb44cef65f55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{f9fb7410-70d8-6827-5857-bb44cef65f55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{f9fb7410-70d8-6827-5857-bb44cef65f55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{f9fb7410-70d8-6827-5857-bb44cef65f55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
