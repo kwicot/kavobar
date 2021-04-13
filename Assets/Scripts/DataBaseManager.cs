@@ -32,9 +32,8 @@ public class DataBaseManager : MonoBehaviour
 
     public void TryLogin(string phone, string pass)
     {
-        phoneNumber = phone;
         password = pass;
-        StartCoroutine(Login());
+        StartCoroutine(Login(phone));
     }
 
     IEnumerator VerifyCode(string code)
@@ -73,17 +72,16 @@ public class DataBaseManager : MonoBehaviour
         Logic(request.text);
     }
 
-    IEnumerator Login()
+    IEnumerator Login(string login)
     {
         WWWForm form = new WWWForm();
         form.AddField("pass",password);
-        form.AddField("phone",phoneNumber);
+        form.AddField("login",login);
         WWW request = new WWW(URL_LoginPHP,form);
         yield return request;
         
         if (request.error != null)
         {
-            Debug.LogError(request.text);
             Debug.LogError(request.error);
             yield break;
         }
@@ -99,6 +97,7 @@ public class DataBaseManager : MonoBehaviour
             case "1": //Пользователь с таким номером уже зарегестрирован
             {
                 TextOutput.txt.Show("Пользователь с таким номером уже зарегестрирован");
+                CC.registerPanelManager.ActiveButton();
                 break;
             }
             case "2": //Неверный номер
@@ -145,11 +144,13 @@ public class DataBaseManager : MonoBehaviour
             case "9": //Неверно указаная почта
             {
                 TextOutput.txt.Show("Неверно указана почта");
+                CC.registerPanelManager.ActiveButton();
                 break;
             }
             case "10": //Пользователь с такой почтой уже зарегистрирован
             {
                 TextOutput.txt.Show("Пользователь с такой почтой уже зарегистрирован");
+                CC.registerPanelManager.ActiveButton();
                 break;
             }
             case "": //

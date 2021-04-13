@@ -22,7 +22,7 @@ public class Controller : MonoBehaviour
         HideLogPanel();
         HideRegPanel();
         HideVerifyPanel();
-        ShowRegPanel();
+        ShowLogPanel();
     }
 
     public void HideRegPanel()

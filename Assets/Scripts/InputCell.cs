@@ -93,6 +93,15 @@ public class InputCell : MonoBehaviour
                     return false;
                 }
             }
+            case InputType.Name:
+            {
+                if (_Text.Length == 0)
+                {
+                    warningText.text = "Поле имя не должно быть пустым";
+                    return false;
+                }
+                return true;
+            }
             default: return true;
         }
     }
@@ -140,16 +149,28 @@ public class InputCell : MonoBehaviour
                     if (_Text.Length > 2)
                     {
                         if (_Text[2] == three) return true;
-                        else return false;
+                        else
+                        {
+                            warningText.text = "Неверный формфт номера";
+                            return false;
+                        }
                     }
                     else return true;
                 }
-                else return false;
+                else
+                {
+                    warningText.text = "Неверный формфт номера";
+                    return false;
+                }
             }
             else return true;
         }
         else if (_Text[0] == first2) return true;
-        else return false;
+        else
+        {
+            warningText.text = "Неверный формфт номера";
+            return false;
+        }
     }
 
     void SaveInfo()

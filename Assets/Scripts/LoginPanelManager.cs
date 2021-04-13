@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,33 +6,31 @@ using UnityEngine.UI;
 
 public class LoginPanelManager : MonoBehaviour
 {
-    public InputField Phone_Input;
-    public InputField Password_Input;
+    public List<InputCell> Cells = new List<InputCell>();
     public Button button;
 
     public DataBaseManager DB;
 
-    public void Edit()
+    private void Start()
     {
-        string obj1 = Phone_Input.text;
-        string obj2 = Password_Input.text;
-
-        if (obj1.Length == 12 && obj2.Length >= 6) button.interactable = true;
-        else button.interactable = false;
+        if (PlayerPrefs.HasKey("password") && PlayerPrefs.HasKey("mail"))
+        {
+            DB.TryLogin(PlayerPrefs.GetString("mail"),PlayerPrefs.GetString(("password")));
+        }
     }
 
     public void Login()
     {
-        string _phone = Phone_Input.text;
-        string _password = Password_Input.text;
-        bool phoneCor = false;
-        bool passCor = false;
-        if (_phone != null && _phone.Length > 2 && _phone[0] == '3' && _phone[1] == '8' && _phone[2] == '0')
+        string _phone = "";
+        string _password = "";
+        for (int i = 0; i < Cells.Count; i++)
         {
-            if (_phone != null &&  _phone.Length == 12) phoneCor = true;
+            InputCell cell = Cells[i];
+            if (!cell.CheckCorrect()) return;
+            if (cell.inputType == InputCell.InputType.Password) _password = cell._Text;
+            if (cell.inputType == InputCell.InputType.Mail) _phone = cell._Text;
         }
-        if (_password != null && _password.Length >= 6) passCor = true;
-        
-        if(passCor && phoneCor) DB.TryLogin(_phone, _password); 
+        DB.TryLogin(_phone,_password);
+
     }
 }

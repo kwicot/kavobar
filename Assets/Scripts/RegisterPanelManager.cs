@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -76,6 +78,12 @@ public class RegisterPanelManager : MonoBehaviour
         CheckInput();
     } */
 
+    
+    private void Update()
+    {
+        
+    }
+
     public void Register()
     {
         string _name = "";
@@ -140,6 +148,12 @@ public class RegisterPanelManager : MonoBehaviour
         }
         
         DB.TryRegistration(_name,_secondName,_password,_phone,_mail);
+        RegisterButton.interactable = false;
+    }
+
+    public void ActiveButton()
+    {
+        RegisterButton.interactable = true;
     }
 
 
